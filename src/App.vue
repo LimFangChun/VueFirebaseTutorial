@@ -1,28 +1,33 @@
 <template>
   <v-app>
     <v-toolbar class="purple hidden-dark4" dark>
-      <v-toolbar-side-icon @click.native="sideNav = !sideNav" class="hidden-sm-and-up"></v-toolbar-side-icon>
-      <v-toolbar-title>Vue Firebase Tutorial</v-toolbar-title>
+      <v-toolbar-side-icon @click.stop="sideNav = !sideNav" class="hidden-sm-and-up"></v-toolbar-side-icon>
+      <v-toolbar-title>
+        <router-link to="/" tag="span" style="cursor: pointer">Vue Meetup Tutorial</router-link>
+      </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-xs-only">
-        <v-btn flat>
-          <v-icon left>supervised_user_circle</v-icon>View Meet Up
+        <v-btn flat v-for="(item) in menuItem" :key="item.title" :to="item.link">
+          <v-icon left>{{item.icon}}</v-icon>
+          {{item.title}}
         </v-btn>
-        <v-btn flat>Link Two</v-btn>
-        <v-btn flat>Link Three</v-btn>
       </v-toolbar-items>
     </v-toolbar>
 
-    <v-navigation-drawer v-model="sideNav">
+    <v-navigation-drawer v-model="sideNav" fixed temporary>
       <v-list>
-        <v-list-tile>
+        <v-list-tile v-for="(item) in menuItem" :key="item.title" :to="item.link">
           <v-list-tile-action>
-            <v-icon>supervised_user_circle</v-icon>
+            <v-icon>{{item.icon}}</v-icon>
           </v-list-tile-action>
-          <v-list-tile-content>View Meetups</v-list-tile-content>
+          <v-list-tile-content>{{item.title}}</v-list-tile-content>
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
+
+    <main>
+      <router-view></router-view>
+    </main>
   </v-app>
 </template>
 
@@ -36,7 +41,18 @@ export default {
   },
   data() {
     return {
-      sideNav: false
+      sideNav: false,
+      menuItem: [
+        {
+          icon: "supervised_user_circle",
+          title: "View Meetups",
+          link: "/meetup"
+        },
+        { icon: "room", title: "Manage Meetups", link: "/meetup/new" },
+        { icon: "person", title: "View Profile", link: "/profile" },
+        { icon: "face", title: "Sign up", link: "/signup" },
+        { icon: "lock_open", title: "Sign in", link: "/signin" }
+      ]
     };
   }
 };
