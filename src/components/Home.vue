@@ -5,14 +5,17 @@
         <v-btn large router to="/meetup" class="info">Explore meetups</v-btn>
       </v-flex>
       <v-flex xs12 sm6 class="text-xs-center text-sm-left">
-        <v-btn large router to="/meetup/new" class="info">Organize meetups</v-btn>
+        <v-btn large router to="/createmeetup" class="info">Organize meetups</v-btn>
       </v-flex>
     </v-layout>
 
     <v-layout row wrap class="mt-2">
       <v-flex xs12>
         <v-carousel>
-          <v-carousel-item v-for="(item) in meetups" :key="item.id" :src="item.imageUrl">
+          <v-carousel-item v-for="(item) in meetups" :key="item.id" 
+          :src="item.imageUrl"
+          @click="onLoadMeetup(item.id)"
+          style="cursor: pointer;">
             <div class="title">{{item.title}}</div>
           </v-carousel-item>
         </v-carousel>
@@ -31,28 +34,19 @@
 import { Component, Vue, Prop } from "vue-property-decorator";
 
 @Component({
-  components: {},
-  methods: {}
+  computed:{
+    meetups(){
+      return this.$store.getters.getLoadedMeetups
+    }
+  },
+  methods: {
+    onLoadMeetup(id){
+      this.$router.push(`/viewmeetup/${id}`);
+    }
+  }
 })
 export default class Home extends Vue {
-  data() {
-    return {
-      meetups: [
-        {
-          imageUrl:
-            "http://scandinavianlibrary.org/wp-content/uploads/2017/11/IMG_0735-1-e1511040507716.jpg",
-          id: "123",
-          title: "Meetup at library"
-        },
-        {
-          imageUrl:
-            "http://scandinavianlibrary.org/wp-content/uploads/2017/11/IMG_0735-1-e1511040507716.jpg",
-          id: "121",
-          title: "Meetup at a"
-        }
-      ]
-    };
-  }
+  
 }
 </script>
 

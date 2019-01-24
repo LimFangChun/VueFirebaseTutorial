@@ -48,7 +48,7 @@ export default {
           title: "View Meetups",
           link: "/meetup"
         },
-        { icon: "room", title: "Manage Meetups", link: "/meetup/new" },
+        { icon: "room", title: "Manage Meetups", link: "/createmeetup" },
         { icon: "person", title: "View Profile", link: "/profile" },
         { icon: "face", title: "Sign up", link: "/signup" },
         { icon: "lock_open", title: "Sign in", link: "/signin" }

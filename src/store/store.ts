@@ -7,23 +7,62 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
     state: {
-        users: [new User(1, 'Hello', undefined)]
+        loadedMeetups: [
+            {
+                imageUrl:
+                    "http://scandinavianlibrary.org/wp-content/uploads/2017/11/IMG_0735-1-e1511040507716.jpg",
+                id: "123",
+                title: "Meetup at library",
+                date: '2018-02-12'
+            },
+            {
+                imageUrl:
+                    "http://scandinavianlibrary.org/wp-content/uploads/2017/11/IMG_0735-1-e1511040507716.jpg",
+                id: "121",
+                title: "Meetup at a",
+                date: '2018-02-10'
+            }
+        ],
+        user:{
+            id: '123',
+            registeredMeetup: ["123"]
+        }
     },
     getters: {
-        getUsers(state) {
-            return state.users;
+        getUser(){
+
+        },
+        getLoadedMeetups(state){
+            return state.loadedMeetups.sort((meetupA, meetupB) => {
+                return new Date(meetupA.date).getTime() - new Date(meetupB.date).getTime()
+            });
+        },
+        getLoadedMeetup(state):any{
+            return (meetupId: string) => {return state.loadedMeetups.find(meetup => meetupId === meetup.id)}
+        },
+        getFeaturedMeetups(state, getters){
+            return getters.loadedMeetups.slice(0, 5);
         }
     },
     mutations: {
-        addUser(state, newUser: User) {
-            state.users.push(newUser);
+        createMeetup(state, payload){
+            state.loadedMeetups.push(payload)
         }
     },
     actions: {
-        addUser(context, newUser: User) {
-            axios({ method: "GET", url: "https://jsonplaceholder.typicode.com/posts/1" })
-                .then(response => { console.log(response.data); }, error => { console.log(error) });
-            context.commit('addUser', newUser)
+        createMeetup({commit}, payload){
+            const meetup = {
+                id: '333',
+                title: payload.title,
+                location: payload.location,
+                imageUrl: payload.imageUrl,
+                description: payload.description,
+                date: new Date()
+            }
+
+            //store to firebase
+
+            commit('createMeetup', meetup);
         }
     }
 });
