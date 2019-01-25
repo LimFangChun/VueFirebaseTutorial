@@ -13,8 +13,8 @@
           ></v-img>
 
           <v-card-text>
-              <div class="info--text">{{meetup.date}} - Library</div>
-              <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium, unde.</div>
+              <div class="info--text">{{meetup.date | date}} - {{meetup.location}}</div>
+              <div>{{meetup.description}}</div>
           </v-card-text>
 
           <v-card-actions>

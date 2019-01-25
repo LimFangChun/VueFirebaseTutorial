@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import User from '@/models/User';
 import axios from 'axios';
+import * as firebase from 'firebase';
 
 Vue.use(Vuex);
 
@@ -13,56 +14,88 @@ export const store = new Vuex.Store({
                     "http://scandinavianlibrary.org/wp-content/uploads/2017/11/IMG_0735-1-e1511040507716.jpg",
                 id: "123",
                 title: "Meetup at library",
-                date: '2018-02-12'
+                date: new Date(),
+                location: "Library",
+                description: "lorem"
             },
             {
                 imageUrl:
                     "http://scandinavianlibrary.org/wp-content/uploads/2017/11/IMG_0735-1-e1511040507716.jpg",
                 id: "121",
                 title: "Meetup at a",
-                date: '2018-02-10'
+                date: new Date(),
+                location: "LOCATION",
+                description: "lorem ipsum"
             }
         ],
-        user:{
-            id: '123',
-            registeredMeetup: ["123"]
-        }
+        user: null
     },
     getters: {
-        getUser(){
-
+        getUser(state) {
+            return state.user;
         },
-        getLoadedMeetups(state){
+        getLoadedMeetups(state) {
             return state.loadedMeetups.sort((meetupA, meetupB) => {
                 return new Date(meetupA.date).getTime() - new Date(meetupB.date).getTime()
             });
         },
-        getLoadedMeetup(state):any{
-            return (meetupId: string) => {return state.loadedMeetups.find(meetup => meetupId === meetup.id)}
+        getLoadedMeetup(state): any {
+            return (meetupId: string) => { return state.loadedMeetups.find(meetup => meetupId === meetup.id) }
         },
-        getFeaturedMeetups(state, getters){
-            return getters.loadedMeetups.slice(0, 5);
+        getFeaturedMeetups(state, getters) {
+            return getters.getLoadedMeetups.slice(0, 5);
         }
     },
     mutations: {
-        createMeetup(state, payload){
+        createMeetup(state, payload) {
             state.loadedMeetups.push(payload)
+        },
+        setUser(state, newUser) {
+            state.user = newUser;
         }
     },
     actions: {
-        createMeetup({commit}, payload){
+        createMeetup({ commit }, payload) {
             const meetup = {
                 id: '333',
                 title: payload.title,
                 location: payload.location,
                 imageUrl: payload.imageUrl,
                 description: payload.description,
-                date: new Date()
+                date: payload.date
             }
 
             //store to firebase
 
             commit('createMeetup', meetup);
+        },
+        userSignUp({ commit }, payload) {
+            firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
+                .then(
+                    response => {
+                        const newUser = {
+                            id: response.user && response.user.uid || '',
+                            registeredMeetup: []
+                        }
+                        commit('setUser', newUser);
+                    }
+                ).catch(error => {
+                    console.log(error);
+                })
+        },
+        userSignIn({ commit }, payload) {
+            firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
+                .then(
+                    response => {
+                        const newUser = {
+                            id: response.user && response.user.uid || '',
+                            registeredMeetup: []
+                        }
+                        commit('setUser', newUser);
+                    }
+                ).catch(error => {
+                    console.log(error);
+                })
         }
     }
 });

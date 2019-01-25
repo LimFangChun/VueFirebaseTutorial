@@ -7,7 +7,7 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-xs-only">
-        <v-btn flat v-for="(item) in menuItem" :key="item.title" :to="item.link">
+        <v-btn flat v-for="(item) in menuItems" :key="item.title" :to="item.link">
           <v-icon left>{{item.icon}}</v-icon>
           {{item.title}}
         </v-btn>
@@ -16,7 +16,7 @@
 
     <v-navigation-drawer v-model="sideNav" fixed temporary>
       <v-list>
-        <v-list-tile v-for="(item) in menuItem" :key="item.title" :to="item.link">
+        <v-list-tile v-for="(item) in menuItems" :key="item.title" :to="item.link">
           <v-list-tile-action>
             <v-icon>{{item.icon}}</v-icon>
           </v-list-tile-action>
@@ -41,19 +41,36 @@ export default {
   },
   data() {
     return {
-      sideNav: false,
-      menuItem: [
-        {
-          icon: "supervised_user_circle",
-          title: "View Meetups",
-          link: "/meetup"
-        },
-        { icon: "room", title: "Manage Meetups", link: "/createmeetup" },
-        { icon: "person", title: "View Profile", link: "/profile" },
+      sideNav: false
+    };
+  },
+  computed: {
+    menuItems() {
+      let item = [
         { icon: "face", title: "Sign up", link: "/signup" },
         { icon: "lock_open", title: "Sign in", link: "/signin" }
-      ]
-    };
+      ];
+
+      if (this.isUserAuthenticated) {
+        item = [
+          {
+            icon: "supervised_user_circle",
+            title: "View Meetups",
+            link: "/meetup"
+          },
+          { icon: "room", title: "Manage Meetups", link: "/createmeetup" },
+          { icon: "person", title: "View Profile", link: "/profile" }
+        ];
+      }
+
+      return item;
+    },
+    isUserAuthenticated() {
+      return (
+        this.$store.getters.getUser !== null &&
+        this.$store.getters.getUser !== undefined
+      );
+    }
   }
 };
 </script>
