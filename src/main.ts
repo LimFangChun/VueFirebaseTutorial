@@ -5,9 +5,11 @@ import router from './router';
 import DateFilter from './filter/date';
 import * as firebase from 'firebase';
 import { store } from './store/store';
+import AlertComponent from './Shared/Alert.vue';
 
 Vue.config.productionTip = false;
 Vue.filter('date', DateFilter);
+Vue.component('app-alert', AlertComponent);
 
 new Vue({
   router,
@@ -22,5 +24,7 @@ new Vue({
       storageBucket: "vue-meetup-app-7194a.appspot.com",
       messagingSenderId: "932768839513"
     });
+
+    this.$store.dispatch('initializeMeetup');
   },
 }).$mount('#app');

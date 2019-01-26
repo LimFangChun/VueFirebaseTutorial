@@ -9,23 +9,32 @@
       </v-flex>
     </v-layout>
 
-    <v-layout row wrap class="mt-2">
+    <v-layout row>
+      <v-flex xs12 sm6 class="text-xs-center text-sm-right">
+        <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="loading"></v-progress-circular>
+      </v-flex>
+    </v-layout>
+
+    <v-layout row wrap class="mt-2" v-if="!loading">
       <v-flex xs12>
         <v-carousel>
-          <v-carousel-item v-for="(item) in meetups" :key="item.id" 
-          :src="item.imageUrl"
-          @click="onLoadMeetup(item.id)"
-          style="cursor: pointer;">
+          <v-carousel-item
+            v-for="(item) in meetups"
+            :key="item.id"
+            :src="item.imageUrl"
+            @click="onLoadMeetup(item.id)"
+            style="cursor: pointer;"
+          >
             <div class="title">{{item.title}}</div>
           </v-carousel-item>
         </v-carousel>
       </v-flex>
     </v-layout>
 
-    <v-layout row wrap class="mt-2">
+    <v-layout row wrap class="mt-2" v-if="!loading">
       <v-flex xs12 class="text-xs-center">
         <p>Welcome to meetups</p>
-      </v-flex>  
+      </v-flex>
     </v-layout>
   </v-container>
 </template>
@@ -34,20 +43,21 @@
 import { Component, Vue, Prop } from "vue-property-decorator";
 
 @Component({
-  computed:{
-    meetups(){
-      return this.$store.getters.getLoadedMeetups
+  computed: {
+    meetups() {
+      return this.$store.getters.getLoadedMeetups;
+    },
+    loading(){
+      return this.$store.getters.getLoading;
     }
   },
   methods: {
-    onLoadMeetup(id){
+    onLoadMeetup(id) {
       this.$router.push(`/viewmeetup/${id}`);
     }
   }
 })
-export default class Home extends Vue {
-  
-}
+export default class Home extends Vue {}
 </script>
 
 <style scoped>

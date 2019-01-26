@@ -1,5 +1,10 @@
 <template>
   <v-container>
+    <v-layout row v-if="error">
+      <v-flex xs12 sm6 offset-sm3>
+        <app-alert @dismissed="onDismissed" :text="error.message"></app-alert>
+      </v-flex>
+    </v-layout>
     <v-layout row>
       <v-flex xs12 sm6 offset-sm3>
         <v-card>
@@ -34,7 +39,12 @@
 
                 <v-layout row>
                   <v-flex xs12>
-                    <v-btn type="submit">Sign In</v-btn>
+                    <v-btn type="submit" :disabled="loading" :loading="loading">
+                      Sign In
+                      <span slot="loader" class="custom-loader">
+                        <v-icon dark>cached</v-icon>
+                      </span>
+                    </v-btn>
                   </v-flex>
                 </v-layout>
               </form>
@@ -58,6 +68,12 @@ export default Vue.extend({
   computed: {
     user() {
       this.$store.getters.getUser;
+    },
+    error() {
+      return this.$store.getters.getError;
+    },
+    loading(){
+      return this.$store.getters.getLoading;
     }
   },
   watch: {
@@ -74,6 +90,9 @@ export default Vue.extend({
         email: this.email,
         password: this.password
       });
+    },
+    onDismissed() {
+      this.$store.dispatch("clearError");
     }
   }
 });
