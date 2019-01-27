@@ -7,6 +7,7 @@ import ViewMeetUp from './components/Meetups/ViewMeetup.vue';
 import Profile from './components/User/Profile.vue';
 import SignIn from './components/User/SignIn.vue';
 import SignUp from './components/User/SignUp.vue';
+import auth_guard from './auth_guard';
 
 Vue.use(Router);
 
@@ -20,33 +21,37 @@ export default new Router({
       component: Home,
     },
     {
-      path:'/meetup',
+      path: '/meetup',
       name: 'Meetups',
-      component: Meetups
+      component: Meetups,
+      beforeEnter: auth_guard
     },
     {
-      path:'/viewmeetup/:id',
+      path: '/viewmeetup/:id',
       name: 'ViewMeetup',
       component: ViewMeetUp,
-      props: true
+      props: true,
+      beforeEnter: auth_guard
     },
     {
-      path:'/createmeetup',
+      path: '/createmeetup',
       name: 'CreateMeetups',
-      component: CreateMeetups
+      component: CreateMeetups,
+      beforeEnter: auth_guard
     },
     {
-      path:'/profile',
+      path: '/profile',
       name: 'Profile',
-      component: Profile
+      component: Profile,
+      beforeEnter: auth_guard
     },
     {
-      path:'/signup',
+      path: '/signup',
       name: 'SignUp',
       component: SignUp
     },
     {
-      path:'/signin',
+      path: '/signin',
       name: 'SignIn',
       component: SignIn
     }

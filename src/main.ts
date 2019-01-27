@@ -21,9 +21,15 @@ new Vue({
       authDomain: "vue-meetup-app-7194a.firebaseapp.com",
       databaseURL: "https://vue-meetup-app-7194a.firebaseio.com",
       projectId: "vue-meetup-app-7194a",
-      storageBucket: "vue-meetup-app-7194a.appspot.com",
+      storageBucket: "gs://vue-meetup-app-7194a.appspot.com",
       messagingSenderId: "932768839513"
     });
+
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.$store.dispatch('autoSignIn', user);
+      }
+    })
 
     this.$store.dispatch('initializeMeetup');
   },
