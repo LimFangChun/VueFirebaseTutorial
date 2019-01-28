@@ -6,10 +6,16 @@ import DateFilter from './filter/date';
 import * as firebase from 'firebase';
 import { store } from './store/store';
 import AlertComponent from './Shared/Alert.vue';
+import EditMeetupDialog from './components/Meetups/Edit/EditMeetupDialog.vue';
+import EditMeetupDateDialog from './components/Meetups/Edit/EditMeetupDateDialog.vue';
+import EditMeetupTimeDialog from './components/Meetups/Edit/EditMeetupTimeDialog.vue';
 
 Vue.config.productionTip = false;
 Vue.filter('date', DateFilter);
 Vue.component('app-alert', AlertComponent);
+Vue.component('app-edit-meetup-dialog', EditMeetupDialog);
+Vue.component('app-edit-meetup-date-dialog', EditMeetupDateDialog);
+Vue.component('app-edit-meetup-time-dialog', EditMeetupTimeDialog);
 
 new Vue({
   router,

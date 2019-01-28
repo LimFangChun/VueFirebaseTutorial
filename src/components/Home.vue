@@ -47,7 +47,7 @@ import { Component, Vue, Prop } from "vue-property-decorator";
     meetups() {
       return this.$store.getters.getLoadedMeetups;
     },
-    loading(){
+    loading() {
       return this.$store.getters.getLoading;
     }
   },

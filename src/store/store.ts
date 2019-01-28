@@ -64,6 +64,23 @@ export const store = new Vuex.Store({
         },
         setLoadedMeetups(state, payload) {
             state.loadedMeetups = payload;
+        },
+        updateMeetup(state, payload){
+            const meetup = state.loadedMeetups.find(meetup => {
+                return meetup.id === payload.id;
+            }) || {title:'', description:'', date:''}
+
+            if(payload.title){
+                meetup.title = payload.title;
+            }
+
+            if(payload.description){
+                meetup.description = payload.description;
+            }
+
+            if(payload.date){
+                meetup.date = payload.date;
+            }
         }
     },
     actions: {
@@ -80,7 +97,9 @@ export const store = new Vuex.Store({
                             title: obj[key].title,
                             description: obj[key].description,
                             imageUrl: obj[key].imageUrl,
-                            date: obj[key].date
+                            location: obj[key].location,
+                            date: obj[key].date,
+                            creatorId: obj[key].creatorId
                         })
                     }
                     commit('setLoadedMeetups', meetup);
@@ -190,6 +209,33 @@ export const store = new Vuex.Store({
             firebase.auth().signOut();
             commit('setUser', null);
             router.push('/signin');
+        },
+        updateMeetup({ commit }, payload) {
+            commit('setLoading', true);
+            const updatedMeetup = payload;
+
+            if (payload.title) {
+                updatedMeetup.title = payload.title;
+            }
+
+            if (payload.description) {
+                updatedMeetup.description = payload.description;
+            }
+
+            if (payload.date) {
+                updatedMeetup.date = payload.date;
+            }
+
+            //save to firebase
+            firebase.database().ref('meetups').child(payload.id).update(updatedMeetup)
+            .then(() => {
+                commit('setLoading', false);
+                commit('updateMeetup', payload);
+            })
+            .catch(error => {
+                console.log(error);
+                commit('setLoading', false);
+            });
         }
     }
 });
