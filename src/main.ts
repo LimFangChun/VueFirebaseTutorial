@@ -9,6 +9,7 @@ import AlertComponent from './Shared/Alert.vue';
 import EditMeetupDialog from './components/Meetups/Edit/EditMeetupDialog.vue';
 import EditMeetupDateDialog from './components/Meetups/Edit/EditMeetupDateDialog.vue';
 import EditMeetupTimeDialog from './components/Meetups/Edit/EditMeetupTimeDialog.vue';
+import RegisterMeetupDialog from './components/Meetups/Registration/RegisterMeetupDialog.vue';
 
 Vue.config.productionTip = false;
 Vue.filter('date', DateFilter);
@@ -16,6 +17,7 @@ Vue.component('app-alert', AlertComponent);
 Vue.component('app-edit-meetup-dialog', EditMeetupDialog);
 Vue.component('app-edit-meetup-date-dialog', EditMeetupDateDialog);
 Vue.component('app-edit-meetup-time-dialog', EditMeetupTimeDialog);
+Vue.component('app-register-meetup-dialog', RegisterMeetupDialog);
 
 new Vue({
   router,
@@ -34,6 +36,7 @@ new Vue({
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.$store.dispatch('autoSignIn', user);
+        this.$store.dispatch('fetchUserData');
       }
     })
 
