@@ -1,4 +1,3 @@
-# edeskclone
 
 ## Project setup
 ```
